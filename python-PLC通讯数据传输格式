@@ -1,0 +1,22 @@
+#写入：PLC中数据存储为二进制，但是缺少将传入数据自动转化为二进制的步骤，再传入数据之前，需要把数据转化为二进制表示，再写入PLC
+#读取：读取的内容也是二进制，需要自己转化
+#统一使用python的struct模块进行转化
+1大小端模式选择（根据自己电脑属性自行选择，实在不清楚就都试一下，数据正确就行）
+2数据的位数和类型要匹配，PLC中的整型对应的二进制位和python中的整型二进制位数一定要相同（例如PLC中的整型是16位，python将整型转化后的二进制也应该是16位）
+3注意传入的数据的个数
+
+import struct
+plcObj = snap7.client.Client()
+plcObj.connect('192.168.0.1', 0, 1)
+#写入的数据列表（数据为基本数据类型时，不需要加*号进行解包）
+list_message = [1,23,4]
+data = struct.pack('>{}f'.format(len(list_message)), *list_message)
+list_message = 100
+data = struct.pack('>{}h'.format(len(list_message)), list_message)
+#写入数据块的编号（由自己建立）
+db_number = 23
+#写入数据块的起始位置，单位是bytes
+start_index = 10
+plcObj.db_write(db_number, start_index, data)
+plcObj.disconnect()
+#解析二进制用struct.unpack参数设置大致相同，基本没什么坑。
