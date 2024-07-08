@@ -1,0 +1,19 @@
+#canny函数求出的点不能直接作为轮廓使用
+edges = cv2.Canny(image, 15, 30)
+ctn = np.where(edges_e == 255)
+ctn = np.array(list(zip(ctn1[1], ctn1[0])))
+rect = cv2.minAreaRect(indexs)
+
+
+
+#颜色空间里面找出的某种颜色组成的点也不能直接作为轮廓使用
+# 2. 转换颜色空间 BGR 到 HSV
+hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+# 3. 确定颜色的范围
+lower_y = np.array([15, 120, 130])
+upper_y = np.array([21, 150, 190])
+# 4. 创建颜色掩膜
+mask = cv2.inRange(hsv, lower_y, upper_y)
+ctn = np.where(mask == 255)
+ctn = np.array(list(zip(indexs[1], indexs[0])))
+rect = cv2.minAreaRect(indexs)
