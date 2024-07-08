@@ -1,0 +1,7 @@
+#该函数返回的角度需要去区分长短边，为方便可以将其转化为 以最上面的边为参考 角度高于水平线是 +，低于为 - 范围在（90到-90之间）
+rect = cv2.minAreaRect(indexs)
+    setae = rect[2]
+    if setae > 45:
+        setae = 90 - setae
+    else:
+        setae = -setae
